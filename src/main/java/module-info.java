@@ -10,9 +10,9 @@ module com.dev.projectjavafxjdbc {
     requires org.kordamp.bootstrapfx.core;
 
     requires com.almasb.fxgl.all;
+    requires jdk.compiler;
 
     opens com.dev.projectjavafxjdbc to javafx.fxml;
     exports com.dev.projectjavafxjdbc;
-    opens com.dev.projectjavafxjdbc.Controller to javafx.fxml;
-    exports com.dev.projectjavafxjdbc.Controller;
+
 }

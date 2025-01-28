@@ -5,17 +5,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class HelloApplication extends Application {
 
+    private static Scene mainScene;
+
     @Override
     public void start(Stage primaryStage) {
         try {
             // Instanciando programa passando o pacote da View:
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
+
+
             // Carregando a view
             ScrollPane scrollPane = loader.load(); // Trocar de parent para ScrollPane
 
@@ -25,7 +30,7 @@ public class HelloApplication extends Application {
             scrollPane.setFitToWidth(true);
 
             // Criando objeto Scene que é a cena principal
-            Scene mainScene = new Scene(scrollPane);
+             mainScene = new Scene(scrollPane);
             // Stage, palco da cena recebe a cena principal como argumento
             primaryStage.setScene(mainScene);
             primaryStage.setTitle("Sample JavaFx application"); // Título do palco
@@ -34,6 +39,11 @@ public class HelloApplication extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Pegando referencia da  Cena
+    public static Scene getMainScene() {
+        return mainScene;
     }
 
     public static void main(String[] args) {
