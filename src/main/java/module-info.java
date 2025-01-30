@@ -16,5 +16,9 @@ module com.dev.projectjavafxjdbc {
     exports com.dev.projectjavafxjdbc;
     exports com.dev.projectjavafxjdbc.controllers;
     opens com.dev.projectjavafxjdbc.controllers to javafx.fxml;
+    exports com.dev.projectjavafxjdbc.model.services;
+    opens com.dev.projectjavafxjdbc.model.services to javafx.fxml;
+    exports com.dev.projectjavafxjdbc.model.entities;
+    opens com.dev.projectjavafxjdbc.model.entities to javafx.fxml;
 
 }

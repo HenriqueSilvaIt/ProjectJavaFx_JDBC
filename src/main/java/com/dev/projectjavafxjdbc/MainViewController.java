@@ -1,6 +1,8 @@
 package com.dev.projectjavafxjdbc;
 
 import com.dev.projectjavafxjdbc.Controller.util.Alerts;
+import com.dev.projectjavafxjdbc.controllers.DepartmentListController;
+import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,7 +40,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void onMenuItemDepartmentAction() {
-        loadView("DepartmentList.fxml");
+        loadView2("DepartmentList.fxml");
     }
 
 
@@ -49,13 +51,13 @@ public class MainViewController implements Initializable {
 
     @Override
 
-    public void initialize(URL uri, ResourceBundle rb ) {
+    public void initialize(URL uri, ResourceBundle rb) {
 
     }
-    
+
     // Método para carregar a tela about.fxml
-    private synchronized void loadView(String absoluteName)  {
-    // o synchronized é para que o método n seja interrompido
+    private synchronized void loadView(String absoluteName) {
+        // o synchronized é para que o método n seja interrompido
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             VBox newVBox = loader.load();
@@ -75,7 +77,40 @@ public class MainViewController implements Initializable {
         } catch (IOException e) {
             Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
         }
-
-
     }
-}
+
+        private synchronized void loadView2 (String absoluteName){
+            // o synchronized é para que o método n seja interrompido
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+                VBox newVBox = loader.load();
+
+                // Pegando referencia do VBOx da cena principal
+                Scene mainScene = HelloApplication.getMainScene();
+                // Get root pega o primeiro elemento da View Principal
+                // , ou seja o Scroll pane, depois o Conteúdo .content
+                VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+                // Trazendo para essa tela o menu bar e os labels abaixo dele
+                Node mainMenu = mainVBox.getChildren().get(0);
+                mainVBox.getChildren().clear();
+                mainVBox.getChildren().add(mainMenu);
+                mainVBox.getChildren().addAll(newVBox.getChildren()); // addAll é para adiconar coleção
+
+                // O loader carrega a view(tela), e partir do loader
+                // abaixo vamos usa-lo para acessar o controller
+                // pegando a referencia do controler, vamos
+                // injetar a depencia do service no controller
+                DepartmentListController controller = loader.getController();
+                // injetando depencencia do service no CONTROLLER
+                controller.setDepartmentService(new DepartmentService());
+                // chamando método de atualização do service na tableView (Tabela
+                controller.updateTableView();
+
+            } catch (IOException e) {
+                Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+            }
+
+        }
+    }
+
