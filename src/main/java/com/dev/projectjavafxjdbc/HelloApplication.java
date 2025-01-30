@@ -42,7 +42,7 @@ public class HelloApplication extends Application {
     }
 
     // Pegando referencia da  Cena
-    public static Scene getMainScene() {
+    public  static Scene getMainScene() {
         return mainScene;
     }
 
