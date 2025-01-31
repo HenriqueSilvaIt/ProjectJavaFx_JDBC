@@ -1,19 +1,19 @@
 package com.dev.projectjavafxjdbc.model.services;
 
 import com.dev.projectjavafxjdbc.model.dao.DaoFactory;
-import com.dev.projectjavafxjdbc.model.dao.DepartmentDao;
-import com.dev.projectjavafxjdbc.model.entities.Department;
+import com.dev.projectjavafxjdbc.model.dao.SellerDao;
+import com.dev.projectjavafxjdbc.model.entities.Seller;
 
 import java.util.List;
 
-public class DepartmentService { // tem que criar uma dependencia no
+public class SellerService { // tem que criar uma dependencia no
 
     // Injeção de dependencia com banco de dados DaoFactory
-    private DepartmentDao dao = DaoFactory.createDepartmentDao();
+    private SellerDao dao = DaoFactory.createSellerDao();
 
-    // DepartmentListController
+    // SellerListController
 
-    public List<Department> findAll() {
+    public List<Seller> findAll() {
 
         // bucas os departamento no banco de dados
         return dao.findAll();
@@ -21,7 +21,7 @@ public class DepartmentService { // tem que criar uma dependencia no
     }
 
     // salva novo departamento ou atualiza;
-    public void saveOrUpdate(Department obj) {
+    public void saveOrUpdate(Seller obj) {
         // Se o id for nulo, significa que estamos
         // inserindo um novo departamento
         if (obj.getId() == null) {
@@ -32,7 +32,7 @@ public class DepartmentService { // tem que criar uma dependencia no
         }
     }
 
-    public void remove(Department obj ) {
+    public void remove(Seller obj ) {
         dao.deleteById(obj.getId());
 
     }
