@@ -5,6 +5,7 @@ import com.dev.projectjavafxjdbc.controllers.util.Utils;
 import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,10 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -39,6 +37,9 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
     @FXML
     private TableColumn<Department, String> tableColumnName;
+
+    @FXML
+    private TableColumn<Department, Department> tableColumnEDIT;
 
     private ObservableList<Department> obsList;
 
@@ -106,6 +107,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
             obsList = FXCollections.observableArrayList(list);
             // ai obsList vai pegar informação da lista de servicos
             tableViewDepartment.setItems(obsList);
+            initEditButtons();
         }
 
         //Instanciando a janela de dialogo para o formulário
@@ -151,6 +153,29 @@ public class DepartmentListController implements Initializable, DataChangeListen
     public void onDataChange() {
         updateTableView();
     }
+
+    //Método cria um botão de edição em cada linha da tabela, para que cada linha da tabela possa ser alterado o departamento
+    private void initEditButtons() {
+        tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEDIT.setCellFactory(param -> new TableCell<Department, Department>() {
+            private final Button button = new Button("edit");
+
+
+            @Override
+            protected void updateItem(Department obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(
+                        event -> createDialogForm( // Cria janela do formulário ao apertar o botão
+                                obj, "DepartmentForm.fxml",Utils.currentStage(event))); // esse obj pega o departamento da linha do departamento que vocÊ clicar
+            }
+        });
+    }
+
 }
 
 
