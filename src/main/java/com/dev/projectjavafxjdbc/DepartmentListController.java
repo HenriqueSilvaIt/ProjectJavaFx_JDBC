@@ -1,18 +1,26 @@
-package com.dev.projectjavafxjdbc.controllers;
+package com.dev.projectjavafxjdbc;
 
-import com.dev.projectjavafxjdbc.HelloApplication;
+import com.dev.projectjavafxjdbc.controllers.util.Alerts;
+import com.dev.projectjavafxjdbc.controllers.util.Utils;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -37,8 +45,11 @@ public class DepartmentListController implements Initializable {
     private Button btNew;
 
     //Método botão
-    public void onBtNewAction() {
-        System.out.println("OnBtNewAto");
+    public void onBtNewAction(ActionEvent event) {
+        //  Pegando referÊncia para o Stage atual
+        Stage parentStage = Utils.currentStage(event);
+        // Abrido arquivo e janela de formulário
+        createDialogForm("DepartmentForm.fxml", parentStage);
     }
 
 
@@ -91,6 +102,30 @@ public class DepartmentListController implements Initializable {
             obsList = FXCollections.observableArrayList(list);
             // ai obsList vai pegar informação da lista de servicos
             tableViewDepartment.setItems(obsList);
+        }
+
+        //Instanciando a janela de dialogo para o formulário
+        private void createDialogForm(String absoluteName, Stage parentStage) { // o segundo argumento é o nome da
+                // view que será carregada e passamos ela no painel (painel) lá embaixo
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+                Pane pane = loader.load(); // carregando a view
+
+                // Inserindo a nova janela na frente ( é um palco dentro do outro)
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Enter Department data: ");
+                dialogStage.setScene(new Scene(pane));
+                dialogStage.setResizable(false); // Resizable é o que permite ou não a janela ser redimensionada
+                // se tiver false ele não vai deixar redimensionar a janela
+                dialogStage.initOwner(parentStage); // aqui colocando o Stage pai dessa janela
+                // Janela vai ficar travada enquanto você não fechar ela, n consegui
+                // acessar a janela anterior, para isso usamos WINDOW_MODAL
+                dialogStage.initModality(Modality.WINDOW_MODAL);
+                dialogStage.showAndWait();
+            }catch (IOException e) {
+                Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+                System.out.println(e.getMessage());
+            }
         }
     }
 

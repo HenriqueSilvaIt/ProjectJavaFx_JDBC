@@ -1,4 +1,4 @@
-package com.dev.projectjavafxjdbc.controllers;
+package com.dev.projectjavafxjdbc.controllers.util;
 
 import javafx.scene.control.Alert;
 
@@ -11,6 +11,7 @@ public class Alerts {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.show();
+        alert.setResizable(true);
 
 
     }

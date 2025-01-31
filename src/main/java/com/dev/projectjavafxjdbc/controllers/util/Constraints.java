@@ -1,4 +1,4 @@
-package com.dev.projectjavafxjdbc;
+package com.dev.projectjavafxjdbc.controllers.util;
 
 import javafx.scene.control.TextField;
 
