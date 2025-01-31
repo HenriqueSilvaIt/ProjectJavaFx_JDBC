@@ -1,6 +1,6 @@
 package com.dev.projectjavafxjdbc;
 
-import com.dev.projectjavafxjdbc.Controller.util.Alerts;
+import com.dev.projectjavafxjdbc.controllers.Alerts;
 import com.dev.projectjavafxjdbc.controllers.DepartmentListController;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import javafx.fxml.FXML;

@@ -11,6 +11,7 @@ module com.dev.projectjavafxjdbc {
 
     requires com.almasb.fxgl.all;
     requires jdk.compiler;
+    requires java.sql;
 
     opens com.dev.projectjavafxjdbc to javafx.fxml;
     exports com.dev.projectjavafxjdbc;
@@ -20,5 +21,7 @@ module com.dev.projectjavafxjdbc {
     opens com.dev.projectjavafxjdbc.model.services to javafx.fxml;
     exports com.dev.projectjavafxjdbc.model.entities;
     opens com.dev.projectjavafxjdbc.model.entities to javafx.fxml;
+    exports com.dev.projectjavafxjdbc.db;
+    opens com.dev.projectjavafxjdbc.db to javafx.fxml;
 
 }

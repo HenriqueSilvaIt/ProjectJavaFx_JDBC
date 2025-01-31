@@ -1,4 +1,4 @@
-package com.dev.projectjavafxjdbc.Controller.util;
+package com.dev.projectjavafxjdbc.controllers;
 
 import javafx.scene.control.Alert;
 

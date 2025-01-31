@@ -78,7 +78,7 @@ public class DepartmentListController implements Initializable {
         }
 
         // Método responsável por acessar os serviços
-        // carregar os departamentos e jogar os departamentos
+        // carregar os Departmentos e jogar os Departmentos
         // no atributo obsersableList
         public void updateTableView() {
             // Verifica o se objeto DepartmentServer foi instanciado

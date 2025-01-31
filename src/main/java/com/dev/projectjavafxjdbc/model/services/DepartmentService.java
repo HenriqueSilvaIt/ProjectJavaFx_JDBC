@@ -1,21 +1,22 @@
 package com.dev.projectjavafxjdbc.model.services;
 
+import com.dev.projectjavafxjdbc.model.dao.DaoFactory;
+import com.dev.projectjavafxjdbc.model.dao.DepartmentDao;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentService { // tem que criar uma dependencia no
+
+    // Injeção de dependencia com banco de dados DaoFactory
+    private DepartmentDao dao = DaoFactory.createDepartmentDao();
+
     // DepartmentListController
 
     public List<Department> findAll() {
-        //MOCK
-        List<Department> list = new ArrayList<>();
-        list.add(new Department(1,"Books"));
-        list.add(new Department(2,"Computers"));
-        list.add(new Department(3,"Electronics"));
-        return list;
 
+        // bucas os departamento no banco de dados
+        return dao.findAll();
     // Mocar é fingir retornar os dados, n retornar de verdade
     }
 }
