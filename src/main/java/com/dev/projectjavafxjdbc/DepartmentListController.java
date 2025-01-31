@@ -3,6 +3,7 @@ package com.dev.projectjavafxjdbc;
 import com.dev.projectjavafxjdbc.controllers.util.Alerts;
 import com.dev.projectjavafxjdbc.controllers.util.Utils;
 import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
+import com.dev.projectjavafxjdbc.db.DbIntegrityException;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DepartmentListController implements Initializable, DataChangeListener {
@@ -40,6 +42,9 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
     @FXML
     private TableColumn<Department, Department> tableColumnEDIT;
+
+    @FXML
+    private TableColumn<Department, Department> tableColumnREMOVE;
 
     private ObservableList<Department> obsList;
 
@@ -108,6 +113,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
             // ai obsList vai pegar informação da lista de servicos
             tableViewDepartment.setItems(obsList);
             initEditButtons();
+            initRemoveButtons();
         }
 
         //Instanciando a janela de dialogo para o formulário
@@ -174,6 +180,48 @@ public class DepartmentListController implements Initializable, DataChangeListen
                                 obj, "DepartmentForm.fxml",Utils.currentStage(event))); // esse obj pega o departamento da linha do departamento que vocÊ clicar
             }
         });
+    }
+
+    // Método para criar um botão de remoção em cada linha de departamento
+    private void initRemoveButtons() {
+        tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnREMOVE.setCellFactory(param -> new TableCell<Department, Department>() {
+            private final Button button = new Button("remove");
+            @Override
+            protected void updateItem(Department obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> removeEntity(obj));
+            }
+
+
+        });
+    }
+
+    private void removeEntity(Department obj) {
+
+        // Armazena o resultado do alert na váriavel result
+        Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+
+      // .get para pegar informação do objeto dentro do optional
+        if (result.get() == ButtonType.OK) { // verifica se clico em OK
+            if (service == null) { // Verifica se o programador
+                // injeto a classe service
+                throw new IllegalStateException("Service was null");
+            }
+            try {
+                service.remove(obj); // remove da tabela
+                updateTableView(); // atualiza os dados na janela
+
+            } catch (DbIntegrityException e) {
+                Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
+
     }
 
 }
