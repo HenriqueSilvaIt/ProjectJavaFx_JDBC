@@ -5,6 +5,7 @@ import com.dev.projectjavafxjdbc.controllers.util.Utils;
 import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
 import com.dev.projectjavafxjdbc.db.DbIntegrityException;
 import com.dev.projectjavafxjdbc.model.entities.Seller;
+import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import com.dev.projectjavafxjdbc.model.services.SellerService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -31,6 +32,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 
     // Injeção de dependencia do servic
     private SellerService service;
+
 
     @FXML
     private TableView<Seller> tableViewSeller;
@@ -146,7 +148,10 @@ public class SellerListController implements Initializable, DataChangeListener {
               SellerFormController controller  = loader.getController();
               // injetando o departamento entity
               controller.setSeller(obj);
-              controller.setSellerService(new SellerService()); // injetando SellerService
+              controller.setServices(new SellerService(), new DepartmentService()); // injetando SellerService
+              // Carregando departamento no banco de dados e colocando
+              // no controller
+              controller.loadAssociateObjects();
               // Se inscrevendo para receber o evento, e quando o
               // evento for disparado, vai ser executando o método
               // lá em baixo onDataChanged()
@@ -237,6 +242,7 @@ public class SellerListController implements Initializable, DataChangeListener {
                 updateTableView(); // atualiza os dados na janela
 
             } catch (DbIntegrityException e) {
+                e.printStackTrace();
                 Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
             }
         }

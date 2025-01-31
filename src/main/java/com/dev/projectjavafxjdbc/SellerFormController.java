@@ -5,13 +5,18 @@ import com.dev.projectjavafxjdbc.controllers.util.Constraints;
 import com.dev.projectjavafxjdbc.controllers.util.Utils;
 import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
 import com.dev.projectjavafxjdbc.db.DbException;
+import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.entities.Seller;
 import com.dev.projectjavafxjdbc.model.exceptions.ValidationException;
+import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import com.dev.projectjavafxjdbc.model.services.SellerService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -24,6 +29,8 @@ public class SellerFormController implements Initializable { // tem que
     private Seller entity;
 
     private SellerService service;
+
+    private DepartmentService departmentService;
 
     // Permiti outros objetos incresverem nessa lista e possam receber o event
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -43,6 +50,9 @@ public class SellerFormController implements Initializable { // tem que
     @FXML
     private TextField txtBaseSalary;
 
+    @FXML
+    private ComboBox<Department> comboBoxDepartment;
+
     // Mensagem de erro caso tenha algo errado no preenchimento do nome
     @FXML
     private Label labelErrorName;
@@ -60,14 +70,18 @@ public class SellerFormController implements Initializable { // tem que
     @FXML
     private Button btSave;
 
+    private ObservableList<Department> obsList;
+
     // Criando instancia da classe Seller
     public void setSeller(Seller entity) {
         this.entity = entity;
     }
 
-    public void setSellerService(SellerService service) {
+    public void setServices(SellerService service, DepartmentService departmentService) {
 
         this.service = service;
+        this.departmentService = departmentService;
+
     }
 
     // Método para  criar uma lista de objetos interessados em receber o event
@@ -170,6 +184,7 @@ public class SellerFormController implements Initializable { // tem que
         // Formata a data do BirthDate
         Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
 
+        initializeComboBoxDepartment();
     }
 
     //Método para atualizar ou salvar informações do formulário
@@ -191,7 +206,33 @@ public class SellerFormController implements Initializable { // tem que
         if (entity.getBirthDate() != null) {
             dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
         }
+
+      // Preenchimento do comboBox
+        if ( entity.getDepartment() == null) {
+          // Se o vendor é novo o departamento n existe ainda
+          // ele vai pegar o primeiro departamento
+            comboBoxDepartment.getSelectionModel().selectFirst();
         }
+        else {
+            // Departamento que tiver associado com vendor
+            // vai para  combo box
+            comboBoxDepartment.setValue(entity.getDepartment());
+        }
+
+        comboBoxDepartment.setValue(entity.getDepartment());
+        }
+
+        // Carregando objetos associados
+        public void loadAssociateObjects () {
+            if (departmentService == null) {
+                throw new IllegalStateException("DepartmentService was null");
+            }
+        List<Department> list   = departmentService.findAll();
+        // Colocando departamentos dentro da lista
+        obsList = FXCollections.observableArrayList(list);
+        comboBoxDepartment.setItems(obsList);
+        }
+
 
     // Utilizado para prencher a exceção no label de erro do Scene
     private void setErrorMessages(Map<String, String> errors ){
@@ -201,5 +242,17 @@ public class SellerFormController implements Initializable { // tem que
             labelErrorName.setText(errors.get("name")); // Pega a mensagem
             // correspondente ao error name e seta ela no labelErrorName
         }
+    }
+
+    private void initializeComboBoxDepartment() {
+        Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department>() {
+            @Override
+            protected void updateItem(Department item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.getName());
+            }
+        };
+        comboBoxDepartment.setCellFactory(factory);
+        comboBoxDepartment.setButtonCell(factory.call(null));
     }
 }
