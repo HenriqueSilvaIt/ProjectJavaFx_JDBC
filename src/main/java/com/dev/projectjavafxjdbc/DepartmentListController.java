@@ -118,6 +118,7 @@ public class DepartmentListController implements Initializable {
                 DepartmentFormController controller  = loader.getController();
                 // injetando o departamento entity
                 controller.setDepartment(obj);
+                controller.setDepartmentService(new DepartmentService()); // injetando DepartmentService
                 controller.updateFormData(); // carrega dados do objeto no formulário
 
                 // Inserindo a nova janela na frente ( é um palco dentro do outro)

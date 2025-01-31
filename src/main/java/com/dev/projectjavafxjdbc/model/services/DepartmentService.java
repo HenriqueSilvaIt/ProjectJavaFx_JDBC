@@ -19,4 +19,16 @@ public class DepartmentService { // tem que criar uma dependencia no
         return dao.findAll();
     // Mocar é fingir retornar os dados, n retornar de verdade
     }
+
+    // salva novo departamento ou atualiza;
+    public void saveOrUpdate(Department obj) {
+        // Se o id for nulo, significa que estamos
+        // inserindo um novo departamento
+        if (obj.getId() == null) {
+            dao.insert(obj);
+        }
+        else { // caso contrário ele atualiza
+            dao.update(obj);
+        }
+    }
 }

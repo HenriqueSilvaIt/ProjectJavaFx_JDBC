@@ -11,4 +11,14 @@ public class Utils {
         // Acessando o stage aonde o evento que recebeu o stage está:
         return (Stage) ((Node) event.getSource()).getScene().getWindow();
     }
+
+    // Método para converter o valor da caixinha de texto para inteiro
+    public static Integer tryParseToInt(String str) {
+       try {
+           return Integer.parseInt(str);
+       } catch (NumberFormatException e ) {
+           // Caso digitem algo diferente de inteiro, vai retornar null
+           return null;
+       }
+    }
 }
