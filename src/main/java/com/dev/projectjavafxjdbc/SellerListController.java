@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -45,6 +46,15 @@ public class SellerListController implements Initializable, DataChangeListener {
 
     @FXML
     private TableColumn<Seller, Seller> tableColumnREMOVE;
+
+    @FXML
+    private TableColumn<Seller, Seller> tableColumnEmail;
+
+    @FXML
+    private TableColumn<Seller, Date> tableColumnBirthDate;
+
+    @FXML
+    private TableColumn<Seller, Double> tableColumnBaseSalary;
 
     private ObservableList<Seller> obsList;
 
@@ -83,6 +93,14 @@ public class SellerListController implements Initializable, DataChangeListener {
             try {   //Padrão do Javafx para iniciar o comportamento das coluna
                 tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+                tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+                tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+                // Formata data
+                Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+                tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+                // Formata double com 2 casa decimais
+                Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
+
 
                 // Pega a referencia da cena principal e pegar janela da
                 // tela pricnipal, o Window é uma superclasse do stage
