@@ -3,6 +3,7 @@ package com.dev.projectjavafxjdbc;
 import com.dev.projectjavafxjdbc.controllers.util.Alerts;
 import com.dev.projectjavafxjdbc.controllers.util.Constraints;
 import com.dev.projectjavafxjdbc.controllers.util.Utils;
+import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
 import com.dev.projectjavafxjdbc.db.DbException;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
@@ -15,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DepartmentFormController implements Initializable { // tem que
@@ -23,6 +26,9 @@ public class DepartmentFormController implements Initializable { // tem que
     private Department entity;
 
     private DepartmentService service;
+
+    // Permiti outros objetos incresverem nessa lista e possam receber o event
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
     private TextField txtId;
@@ -49,6 +55,16 @@ public class DepartmentFormController implements Initializable { // tem que
         this.service = service;
     }
 
+    // Método para  criar uma lista de objetos interessados em receber o event
+    public void subscribeDataChangeListener(DataChangeListener listener) {
+        // inscreve (salva) o listerner na lista
+        dataChangeListeners.add(listener);
+
+        // então todos os objetos que implemente a interface DataChangeListener
+        // pode se incresver para receber o evento dessa classe
+    }
+
+
     // Botão cancela
     @FXML
     private Button btCancel;
@@ -66,6 +82,9 @@ public class DepartmentFormController implements Initializable { // tem que
             // Instancia o departamento (entity) e salva no banco
             entity = getFormData();
             service.saveOrUpdate(entity);
+
+            // Notifica as classes listeners
+            notifyDataChangeListeners();
             // Fechanado janela ao clicar no salvar
             Utils.currentStage(event).close();
 
@@ -73,6 +92,12 @@ public class DepartmentFormController implements Initializable { // tem que
             Alerts.showAlert("Error saving objetct", null, e.getMessage(), Alert.AlertType.ERROR);
         }
 
+    }
+
+    private void notifyDataChangeListeners() {
+        for (DataChangeListener listener : dataChangeListeners) {
+            listener.onDataChange();
+        }
     }
 
     // Método apra pegar os dados  do objeto e salvar

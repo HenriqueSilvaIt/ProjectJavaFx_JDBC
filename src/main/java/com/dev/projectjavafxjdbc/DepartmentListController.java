@@ -2,6 +2,7 @@ package com.dev.projectjavafxjdbc;
 
 import com.dev.projectjavafxjdbc.controllers.util.Alerts;
 import com.dev.projectjavafxjdbc.controllers.util.Utils;
+import com.dev.projectjavafxjdbc.controllers.util.listeners.DataChangeListener;
 import com.dev.projectjavafxjdbc.model.entities.Department;
 import com.dev.projectjavafxjdbc.model.services.DepartmentService;
 import javafx.collections.FXCollections;
@@ -25,7 +26,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 
     // Injeção de dependencia do servic
     private DepartmentService service;
@@ -119,6 +120,10 @@ public class DepartmentListController implements Initializable {
                 // injetando o departamento entity
                 controller.setDepartment(obj);
                 controller.setDepartmentService(new DepartmentService()); // injetando DepartmentService
+                // Se inscrevendo para receber o evento, e quando o
+                // evento for disparado, vai ser executando o método
+                // lá em baixo onDataChanged()
+                controller.subscribeDataChangeListener(this);
                 controller.updateFormData(); // carrega dados do objeto no formulário
 
                 // Inserindo a nova janela na frente ( é um palco dentro do outro)
@@ -137,7 +142,16 @@ public class DepartmentListController implements Initializable {
                 System.out.println(e.getMessage());
             }
         }
+
+        // Quando dispara o evento informando que foi alterado
+    // os dados no formulário ao clicarem em salvar
+    // esse método vai atualizar a janela anterior
+    // com updateTableView(
+    @Override
+    public void onDataChange() {
+        updateTableView();
     }
+}
 
 
 
