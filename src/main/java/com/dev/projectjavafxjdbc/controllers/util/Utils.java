@@ -100,4 +100,12 @@ public class Utils {
             }
         });
     }
+    // Método para converter o valor da caixinha de texto para Decimal
+    public static Double tryParseToDouble(String str) {
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 }
