@@ -1,6 +1,8 @@
 package com.dev.projectjavafxjdbc.model.dao.impl;
 
 
+
+
 import com.dev.projectjavafxjdbc.db.DB;
 import com.dev.projectjavafxjdbc.db.DbException;
 import com.dev.projectjavafxjdbc.model.dao.SellerDao;
@@ -139,7 +141,9 @@ public class SellerDaoJDBC implements SellerDao {
 		obj.setName(rs.getString("Name"));
 		obj.setEmail(rs.getString("Email"));
 		obj.setBaseSalary(rs.getDouble("BaseSalary"));
-		obj.setBirthDate(rs.getDate("BirthDate"));
+		// Para o javafx a data abaixo tem que ser java.util e não sql
+		obj.setBirthDate(new java.util.Date(rs.getTimestamp("BirthDate").getTime()));
+
 		obj.setDepartment(dep);
 		return obj;
 	}

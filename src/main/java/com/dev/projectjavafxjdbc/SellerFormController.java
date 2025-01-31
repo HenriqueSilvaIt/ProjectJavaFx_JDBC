@@ -11,12 +11,11 @@ import com.dev.projectjavafxjdbc.model.services.SellerService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class SellerFormController implements Initializable { // tem que
@@ -35,10 +34,27 @@ public class SellerFormController implements Initializable { // tem que
     @FXML
     private TextField txtName;
 
+    @FXML
+    private TextField txtEmail;
+
+    @FXML
+    private DatePicker dpBirthDate;
+
+    @FXML
+    private TextField txtBaseSalary;
 
     // Mensagem de erro caso tenha algo errado no preenchimento do nome
     @FXML
     private Label labelErrorName;
+
+    @FXML
+    private Label labelErrorEmail;
+
+    @FXML
+    private Label labelErrorBirthDate;
+
+    @FXML
+    private Label labelErrorBaseSalary;
 
     // Botão Salva
     @FXML
@@ -131,7 +147,7 @@ public class SellerFormController implements Initializable { // tem que
     public void onBtCancelAction(ActionEvent event) {
         // Cancela o preenchimento do formulário
 
-      // fecha a janela ao clicar no cancelar
+      // fecha a janela ao clicar no cancelar/
        Utils.currentStage(event).close();
 
     }
@@ -141,11 +157,19 @@ public class SellerFormController implements Initializable { // tem que
         initializeNodes();
     }
 
+    // Restrições dos campos
     private void initializeNodes() {
         // Limitando o atributo id para aceitar somente números inteiros
         Constraints.setTextFieldInteger(txtId);
-        // Limitando o atributo name para aceitar somente 30 caracteres
-        Constraints.setTextFieldMaxLength(txtName, 30);
+        // Limitando o atributo name do vendedor para aceitar somente 30 caracteres
+        Constraints.setTextFieldMaxLength(txtName, 70);
+        // Vamos dizer que o salaário é double
+        Constraints.setTextFieldDouble(txtBaseSalary);
+        // Limitando quantidade de caracter
+        Constraints.setTextFieldMaxLength(txtEmail, 60);
+        // Formata a data do BirthDate
+        Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
+
     }
 
     //Método para atualizar ou salvar informações do formulário
@@ -160,7 +184,14 @@ public class SellerFormController implements Initializable { // tem que
         // trabalha com String e para pegar o id precisamos converter para
         // inteiro, por isso usamos o String.valueOf
         txtName.setText(entity.getName());
-    }
+        txtEmail.setText(entity.getEmail());
+        Locale.setDefault(Locale.US);
+        txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
+        // O DataPicker trablh com LOCAL DATE pega da local
+        if (entity.getBirthDate() != null) {
+            dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
+        }
+        }
 
     // Utilizado para prencher a exceção no label de erro do Scene
     private void setErrorMessages(Map<String, String> errors ){
