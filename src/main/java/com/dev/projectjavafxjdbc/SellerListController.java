@@ -137,37 +137,37 @@ public class SellerListController implements Initializable, DataChangeListener {
 
         //Instanciando a janela de dialogo para o formulário
        private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) { // o segundo argumento é o nome da
-      //         // view que será carregada e passamos ela no painel (painel) lá embaixo
-      //     try {
-      //         FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-      //         Pane pane = loader.load(); // carregando a view
+              // view que será carregada e passamos ela no painel (painel) lá embaixo
+          try {
+              FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+              Pane pane = loader.load(); // carregando a view
 
-      //         // Pegando referencia para o controlador form
-      //         SellerFormController controller  = loader.getController();
-      //         // injetando o departamento entity
-      //         controller.setSeller(obj);
-      //         controller.setSellerService(new SellerService()); // injetando SellerService
-      //         // Se inscrevendo para receber o evento, e quando o
-      //         // evento for disparado, vai ser executando o método
-      //         // lá em baixo onDataChanged()
-      //         controller.subscribeDataChangeListener(this);
-      //         controller.updateFormData(); // carrega dados do objeto no formulário
+              // Pegando referencia para o controlador form
+              SellerFormController controller  = loader.getController();
+              // injetando o departamento entity
+              controller.setSeller(obj);
+              controller.setSellerService(new SellerService()); // injetando SellerService
+              // Se inscrevendo para receber o evento, e quando o
+              // evento for disparado, vai ser executando o método
+              // lá em baixo onDataChanged()
+              controller.subscribeDataChangeListener(this);
+              controller.updateFormData(); // carrega dados do objeto no formulário
 
-      //         // Inserindo a nova janela na frente ( é um palco dentro do outro)
-      //         Stage dialogStage = new Stage();
-      //         dialogStage.setTitle("Enter Seller data: ");
-      //         dialogStage.setScene(new Scene(pane));
-      //         dialogStage.setResizable(false); // Resizable é o que permite ou não a janela ser redimensionada
-      //         // se tiver false ele não vai deixar redimensionar a janela
-      //         dialogStage.initOwner(parentStage); // aqui colocando o Stage pai dessa janela
-      //         // Janela vai ficar travada enquanto você não fechar ela, n consegui
-      //         // acessar a janela anterior, para isso usamos WINDOW_MODAL
-      //         dialogStage.initModality(Modality.WINDOW_MODAL);
-      //         dialogStage.showAndWait();
-      //     }catch (IOException e) {
-      //         Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-      //         System.out.println(e.getMessage());
-      //     }
+              // Inserindo a nova janela na frente ( é um palco dentro do outro)
+              Stage dialogStage = new Stage();
+              dialogStage.setTitle("Enter Seller data: ");
+              dialogStage.setScene(new Scene(pane));
+              dialogStage.setResizable(false); // Resizable é o que permite ou não a janela ser redimensionada
+              // se tiver false ele não vai deixar redimensionar a janela
+              dialogStage.initOwner(parentStage); // aqui colocando o Stage pai dessa janela
+              // Janela vai ficar travada enquanto você não fechar ela, n consegui
+              // acessar a janela anterior, para isso usamos WINDOW_MODAL
+              dialogStage.initModality(Modality.WINDOW_MODAL);
+              dialogStage.showAndWait();
+          }catch (IOException e) {
+              Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+              System.out.println(e.getMessage());
+          }
        }
 
         // Quando dispara o evento informando que foi alterado
