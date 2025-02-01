@@ -33,7 +33,7 @@
                   <Insets />
                </VBox.margin>
                <padding>
-                  <Insets left="250.0" top="140.0" />
+                  <Insets left="230.0" top="140.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />

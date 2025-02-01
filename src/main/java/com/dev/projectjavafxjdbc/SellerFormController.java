@@ -153,7 +153,7 @@ public class SellerFormController implements Initializable { // tem que
         obj.setName(txtName.getText());
 
         if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) { // Trim é utilizado para eliminar qualquer espaço em branco que esteja no inicio ou no final
-            exception.addError("name", "Field can't be empty");
+            exception.addError("email", "Field can't be empty");
         }
         obj.setEmail(txtEmail.getText());
 
@@ -165,18 +165,19 @@ public class SellerFormController implements Initializable { // tem que
             Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
             obj.setBirthDate(Date.from(instant));
         }
-
-        if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) { // Trim é utilizado para eliminar qualquer espaço em branco que esteja no inicio ou no final
+// Trim é utilizado para eliminar qualquer espaço em branco que esteja no inicio ou no final
+        if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
             exception.addError("baseSalary", "Field can't be empty");
-        }
-        obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
+        } else {
+            obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
 
-        obj.setDepartment(comboBoxDepartment.getValue());
+            obj.setDepartment(comboBoxDepartment.getValue());
+}
+            if (exception.getErrors().size() > 0) { // verifica se exceção tem pelo meno 1 erro
+                throw exception;
+            }
+            return obj;
 
-        if (exception.getErrors().size() > 0 ) { // verifica se exceção tem pelo meno 1 erro
-            throw exception;
-        }
-        return obj;
     }
 
     @FXML
